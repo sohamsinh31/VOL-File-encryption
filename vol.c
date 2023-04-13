@@ -1,3 +1,12 @@
+// <------------------------------------------VERSION 1.0 ----------------------------------------------------->
+// FUNCTIONALITIES OF VERSION 1.0 OF VOL FILE ENCRYPTION:--
+// 1.It supports upto 64 files at a time to be encrypted at once.
+// 2.End to end decryption and usabilty for user.
+// 3.Portability,machine independent and all operating system support.
+// 4.Custom file encryption algorithem and user-freindly.
+
+
+
 // The MIT License (MIT)
 
 // Copyright (c) 2023 VOLVET India
@@ -86,7 +95,7 @@ int encrypt_files(int n)
     return 0;
 }
 
-int encrypt_data(char *filenames[],char *output_filename,int n)
+int encrypt_data(char *filenames[], char *output_filename, int n)
 {
     vol_str v1;
     int c;
@@ -105,6 +114,11 @@ int encrypt_data(char *filenames[],char *output_filename,int n)
         long int res = ftell(fp[i]);
         v1.files_positions[i] = res;
         fseek(fp[i], 0L, SEEK_SET);
+
+        // Copy file name to v1.file_names array
+        int name_len = strlen(filenames[i]);
+        v1.file_names[i] = (char *)malloc(name_len + 1);
+        strcpy(v1.file_names[i], filenames[i]);
     }
 
     // Open output file
@@ -192,7 +206,7 @@ int decrypt_files()
     return 0;
 }
 
-int decrypt_files(char *input_filename)
+int decrypt_data(char *input_filename)
 {
     vol_str v1;
     int c;
@@ -238,4 +252,66 @@ int decrypt_files(char *input_filename)
     printf("\nFile successfully decrypted.\n");
 
     return 0;
+}
+
+void print_exec_info(char *exec_name)
+{
+    printf("\n%s Usege:-\n-o:\tspecify output file name to store.\n-s\tspecify souces not more than %d to be encrypted.\n-d:\tspecify encrypted file to decompress.\n", exec_name, MAX_FILE_SIZE);
+}
+
+// FUNCTION TO IMPLEMENT MAIN BLOCK OF CODE:THIS FUNCTION IS TO TAKE INPPPUT AND RUN PROGRAM FROM TERMINAL
+void exec_main(int argc, char *argv[])
+{
+    // DECLARATIONS
+    char *files[64], *output, *decrypt;
+    int to_encrypt = 0, to_decrypt = 0;
+    int k = 0, n = 0;
+
+    // PROGRAMMING LOGIC IS STARTED FROM HERE
+
+    if (argc == 1)
+    {
+        print_exec_info(argv[0]);
+    }
+
+    for (int i = 1; i < argc; i++)
+    {
+        if (strcmp(argv[i], "-s") == 0)
+        {
+            to_encrypt = 1;
+            for (int j = i + 1; j < argc; j++)
+            {
+                if (strcmp(argv[j], "-o") == 0 || strcmp(argv[j], "-p") == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    files[k] = (char *)malloc(sizeof(char) * strlen(argv[j]) + 1);
+                    strcat(files[k], argv[j]);
+                    k++;
+                    n++;
+                }
+            }
+        }
+        if (strcmp(argv[i], "-o") == 0)
+        {
+            output = (char *)malloc(sizeof(char) * strlen(argv[i + 1]) + 1);
+            strcat(output, argv[i + 1]);
+        }
+        if (strcmp(argv[i], "-d") == 0)
+        {
+            to_decrypt = 1;
+            decrypt = (char *)malloc(sizeof(char) * strlen(argv[i + 1]) + 1);
+            strcat(decrypt, argv[i + 1]);
+        }
+    }
+    if (to_encrypt)
+    {
+        encrypt_data(files, output, n);
+    }
+    if (to_decrypt)
+    {
+        decrypt_data(decrypt);
+    }
 }

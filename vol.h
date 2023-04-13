@@ -20,5 +20,7 @@ int encrypt_files(int n);
 int decrypt_files();
 int encrypt_data(char *filenames[],char *output_filename, int n);
 int decrypt_data(char *input_filename);
+void exec_main(int argc, char *argv[]);
+void print_exec_info(char *exec_name);
 
 #endif // VOL_H_INCLUDED
