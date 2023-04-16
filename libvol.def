@@ -1,0 +1,7 @@
+EXPORTS
+    decrypt_data @1
+    decrypt_files @2
+    encrypt_data @3
+    encrypt_files @4
+    exec_main @5
+    print_exec_info @6
