@@ -4,6 +4,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
+#include "python3.10/Python.h"
+#include <unistd.h> // For unlink()
 
 // Maximum files to encrypt at a time
 #define MAX_FILE_SIZE 64
@@ -22,5 +24,7 @@ int encrypt_data(char *filenames[],char *output_filename, int n);
 int decrypt_data(char *input_filename);
 void exec_main(int argc, char *argv[]);
 void print_exec_info(char *exec_name);
+int compress_file(char *file_name);
+
 
 #endif // VOL_H_INCLUDED

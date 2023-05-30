@@ -5,11 +5,9 @@
 // 3.Portability,machine independent and all operating system support.
 // 4.Custom file encryption algorithem and user-freindly.
 
-
-
 // The MIT License (MIT)
 
-// Copyright (c) 2023 VOLVET India
+// Copyright (c) 2023 VOLVET LLP
 
 //  Permission is hereby granted, free of charge, to any person obtaining a
 //  copy of this software and associated documentation files (the "Software"),
@@ -259,7 +257,7 @@ void print_exec_info(char *exec_name)
     printf("\n%s Usege:-\n-o:\tspecify output file name to store.\n-s\tspecify souces not more than %d to be encrypted.\n-d:\tspecify encrypted file to decompress.\n", exec_name, MAX_FILE_SIZE);
 }
 
-// FUNCTION TO IMPLEMENT MAIN BLOCK OF CODE:THIS FUNCTION IS TO TAKE INPPPUT AND RUN PROGRAM FROM TERMINAL
+// FUNCTION TO IMPLEMENT MAIN BLOCK OF CODE:THIS FUNCTION IS TO TAKE INPUT AND RUN PROGRAM FROM TERMINAL
 void exec_main(int argc, char *argv[])
 {
     // DECLARATIONS
@@ -309,9 +307,41 @@ void exec_main(int argc, char *argv[])
     if (to_encrypt)
     {
         encrypt_data(files, output, n);
+        compress_file(output);
     }
     if (to_decrypt)
     {
         decrypt_data(decrypt);
     }
 }
+
+/* Function to encrypt files with help of python */
+
+int compress_file(char *file_name)
+{
+    Py_Initialize();
+
+    // Create the Python code string with the input and output file names
+    char pythonCode[256];
+    snprintf(pythonCode, sizeof(pythonCode),
+             "import gzip\n"
+             "import shutil\n"
+             "input_file = '%s'\n"
+             "inp2 = input_file.split('.')[0]\n"
+             "output_file = inp2 + '.vol'\n"
+             "with open(input_file, 'rb') as f_in:\n"
+             "    with gzip.open(output_file, 'wb') as f_out:\n"
+             "        shutil.copyfileobj(f_in, f_out)\n",
+             file_name);
+
+    // Execute Python code to compress the file
+    PyRun_SimpleString(pythonCode);
+
+    Py_Finalize();
+
+    // Delete the input file
+    unlink(file_name);
+
+    return 0;
+}
+
