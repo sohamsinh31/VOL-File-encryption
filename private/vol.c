@@ -272,6 +272,11 @@ void exec_main(int argc, char *argv[])
         print_exec_info(argv[0]);
     }
 
+    if(argc >= MAX_FILE_SIZE)
+    {
+        printf("You reached maximum file limit");
+    }
+
     for (int i = 1; i < argc; i++)
     {
         if (strcmp(argv[i], "-s") == 0)
@@ -344,4 +349,3 @@ int compress_file(char *file_name)
 
     return 0;
 }
-
