@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 import subprocess
+import os
+import sys
 
 def encrypt_files():
     # Open a file dialog to select files
@@ -39,16 +41,19 @@ def decrypt_files():
     # Show a message box after decryption is complete
     tk.messagebox.showinfo('Decryption Complete', 'File successfully decrypted.')
 
-# Create the main window
-window = tk.Tk()
+def main():
+    # Create the main window
+    window = tk.Tk()
 
-# Create a button to select files and encrypt
-encrypt_button = tk.Button(window, text='Select Files and Encrypt', command=encrypt_files)
-encrypt_button.pack()
+    # Create a button to select files and encrypt
+    encrypt_button = tk.Button(window, text='Select Files and Encrypt', command=encrypt_files)
+    encrypt_button.pack()
 
-# Create a button to select an encrypted file and decrypt
-decrypt_button = tk.Button(window, text='Select Encrypted File and Decrypt', command=decrypt_files)
-decrypt_button.pack()
+    # Create a button to select an encrypted file and decrypt
+    decrypt_button = tk.Button(window, text='Select Encrypted File and Decrypt', command=decrypt_files)
+    decrypt_button.pack()
 
-# Start the main loop
-window.mainloop()
+    # Start the main loop
+    window.mainloop()
+
+print(os.getcwd())

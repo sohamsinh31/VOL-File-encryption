@@ -2,6 +2,6 @@
 
 int main(int argc, char const *argv[])
 {
-    exec_main(argc, argv);
+    init_gui();
     return 0;
 }

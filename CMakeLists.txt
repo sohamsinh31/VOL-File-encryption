@@ -11,6 +11,7 @@ set(SOURCES private/vol.c private/main.c)
 
 # Add a shared library target
 add_library(VOL-File SHARED ${SOURCES})
+add_executable(VOLGUI private/GUI.c)
 
 # Set the library output name
 set_target_properties(VOL-File PROPERTIES OUTPUT_NAME "vol")
@@ -30,3 +31,4 @@ endif()
 # Set the library output directory
 set_target_properties(VOL-File PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 target_link_libraries(VOL-File -lpython3.10)
+target_link_libraries(VOLGUI -lpython3.10 -lvol)

@@ -272,7 +272,7 @@ void exec_main(int argc, char *argv[])
         print_exec_info(argv[0]);
     }
 
-    if(argc >= MAX_FILE_SIZE)
+    if (argc >= MAX_FILE_SIZE)
     {
         printf("You reached maximum file limit");
     }
@@ -348,4 +348,61 @@ int compress_file(char *file_name)
     unlink(file_name);
 
     return 0;
+}
+
+// GUI code starts from here
+
+void init_gui()
+{
+    // Initialize the Python interpreter
+    Py_Initialize();
+
+    PyRun_SimpleString(""
+                       "import os"
+                       "print(os.getcwd())");
+
+    // Import the module containing your Python function
+    PyObject *pModule = PyImport_ImportModule("Helper/GUI.py");
+    if (!pModule)
+    {
+        PyErr_Print();
+        Py_Finalize();
+        return -1;
+    }
+
+    // Get a reference to the function
+    PyObject *pFunction = PyObject_GetAttrString(pModule, "main");
+    if (!pFunction || !PyCallable_Check(pFunction))
+    {
+        if (PyErr_Occurred())
+            PyErr_Print();
+        fprintf(stderr, "Cannot find function 'my_python_function'\n");
+        Py_XDECREF(pFunction);
+        Py_DECREF(pModule);
+        Py_Finalize();
+        return -1;
+    }
+
+    // Call the function (no arguments in this example)
+    PyObject *pResult = PyObject_CallObject(pFunction, NULL);
+    if (!pResult)
+    {
+        PyErr_Print();
+        Py_DECREF(pFunction);
+        Py_DECREF(pModule);
+        Py_Finalize();
+        return -1;
+    }
+
+    // Print the result (assuming the function returns an int)
+    int result = (int)PyLong_AsLong(pResult);
+    printf("Result: %d\n", result);
+
+    // Clean up references
+    Py_DECREF(pResult);
+    Py_DECREF(pFunction);
+    Py_DECREF(pModule);
+
+    // Finalize the Python interpreter
+    Py_Finalize();
 }
