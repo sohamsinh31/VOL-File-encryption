@@ -275,6 +275,7 @@ void exec_main(int argc, char *argv[])
     if (argc >= MAX_FILE_SIZE)
     {
         printf("You reached maximum file limit");
+        return;
     }
 
     for (int i = 1; i < argc; i++)
@@ -357,12 +358,13 @@ void init_gui()
     // Initialize the Python interpreter
     Py_Initialize();
 
-    PyRun_SimpleString(""
-                       "import os"
-                       "print(os.getcwd())");
+    PyRun_SimpleString("import os");
+
+    // Add the current directory to the Python path (optional but helpful)
+    PyRun_SimpleString("import sys; sys.path.append('.')");
 
     // Import the module containing your Python function
-    PyObject *pModule = PyImport_ImportModule("Helper/GUI.py");
+    PyObject *pModule = PyImport_ImportModule("Helper.GUI");
     if (!pModule)
     {
         PyErr_Print();

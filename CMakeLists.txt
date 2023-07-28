@@ -30,5 +30,10 @@ endif()
 
 # Set the library output directory
 set_target_properties(VOL-File PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
+
+# Set the executable output directory (same as the library output directory)
+set_target_properties(VOLGUI PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
+
+# Link libraries for VOL-File and VOLGUI
 target_link_libraries(VOL-File -lpython3.10)
 target_link_libraries(VOLGUI -lpython3.10 -lvol)
