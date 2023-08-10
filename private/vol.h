@@ -4,7 +4,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-#include "python3.10/Python.h"
+#include "Python.h"
 #include <unistd.h> // For unlink()
 
 // Maximum files to encrypt at a time
