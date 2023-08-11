@@ -37,7 +37,7 @@ int encrypt_files(int n)
     int c;
 
     // Open input files
-    FILE *fp[n];
+    FILE **fp = malloc(n * sizeof(FILE*));
     for (int i = 0; i < n; i++)
     {
         char temp[MAX_FILE_SIZE];
@@ -99,7 +99,7 @@ int encrypt_data(char *filenames[], char *output_filename, int n)
     int c;
 
     // Open input files
-    FILE *fp[n];
+    FILE **fp = malloc(n * sizeof(FILE*));
     for (int i = 0; i < n; i++)
     {
         fp[i] = fopen(filenames[i], "rb");
@@ -353,7 +353,7 @@ int compress_file(char *file_name)
 
 // GUI code starts from here
 
-void init_gui()
+int init_gui()
 {
     // Initialize the Python interpreter
     Py_Initialize();

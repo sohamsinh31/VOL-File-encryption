@@ -31,13 +31,15 @@ endif()
 
 # Set the library output directory for VOL-File
 set_target_properties(VOL-File PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
+set_target_properties(VOL-File PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
+
+target_link_libraries(VOL-File PRIVATE Python3::Python)
 
 # Add VOLGUI target if needed
 add_executable(VOLGUI private/GUI.c)
 
+# Link libraries for VOL-File and VOLGUI
+target_link_libraries(VOLGUI PRIVATE Python3::Python -L${OUTPUT_DIRECTORY} -lvol)
+
 # Set the executable output directory (same as the library output directory)
 set_target_properties(VOLGUI PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
-
-# Link libraries for VOL-File and VOLGUI
-target_link_libraries(VOL-File PRIVATE Python3::Python)
-target_link_libraries(VOLGUI PRIVATE Python3::Python -L. -lvol)
