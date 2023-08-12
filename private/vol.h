@@ -26,6 +26,7 @@ void exec_main(int argc, char *argv[]);
 void print_exec_info(char *exec_name);
 int compress_file(char *file_name);
 int init_gui();
+int clean_and_open_file(const char *filename, const char *mode, FILE **file);
 
 
 #endif // VOL_H_INCLUDED

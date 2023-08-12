@@ -1,8 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 import subprocess
 import os
-import sys
 
 def encrypt_files():
     # Open a file dialog to select files
@@ -20,26 +19,45 @@ def encrypt_files():
     # Convert the files to a list of strings
     file_list = [str(file) for file in files]
 
-    # Run the encryption command using the subprocess module
-    command = ['./vol', '-s'] + file_list + ['-o', output_file]
-    subprocess.run(command)
+    # Convert the list to a single string
+    vol_executable = os.path.join(os.getcwd(), 'vol')  # Get the absolute path to 'vol' in the current directory
+    command = [vol_executable, '-s'] + file_list + ['-o', output_file]
+    command_string = ' '.join(command)
 
-    # Show a message box after encryption is complete
-    tk.messagebox.showinfo('Encryption Complete', 'Files successfully encrypted.')
+    # Run the encryption command using the subprocess module
+    try:
+        subprocess.run(command_string, shell=True, check=True)
+        # Show a message box after encryption is complete
+        messagebox.showinfo('Encryption Complete', 'Files successfully encrypted.')
+    except subprocess.CalledProcessError:
+        # An error occurred during encryption
+        messagebox.showerror('Encryption Error', 'An error occurred during encryption.')
 
 def decrypt_files():
     # Open a file dialog to select the encrypted file
-    file = filedialog.askopenfilenames()
+    selected_file = filedialog.askopenfilename()
 
-    if not file:
+    if not selected_file:
         return
 
-    # Run the decryption command using the subprocess module
-    command = ['./vol', '-d', file]
-    subprocess.run(command)
+    # Check if the selected file exists
+    if not os.path.exists(selected_file):
+        messagebox.showerror('File Not Found', 'The selected file does not exist.')
+        return
 
-    # Show a message box after decryption is complete
-    tk.messagebox.showinfo('Decryption Complete', 'File successfully decrypted.')
+    # Convert the list to a single string
+    vol_executable = os.path.join(os.getcwd(), 'vol')  # Get the absolute path to 'vol' in the current directory
+    command = [vol_executable, '-d', selected_file]
+    command_string = ' '.join(command)
+
+    # Run the decryption command using the subprocess module
+    try:
+        subprocess.run(command_string, shell=True, check=True)
+        # Show a message box after decryption is complete
+        messagebox.showinfo('Decryption Complete', 'File successfully decrypted.')
+    except subprocess.CalledProcessError:
+        # An error occurred during decryption
+        messagebox.showerror('Decryption Error', 'An error occurred during decryption.')
 
 def main():
     # Create the main window
@@ -57,3 +75,4 @@ def main():
     window.mainloop()
 
 print(os.getcwd())
+main()

@@ -37,7 +37,7 @@ int encrypt_files(int n)
     int c;
 
     // Open input files
-    FILE **fp = malloc(n * sizeof(FILE*));
+    FILE **fp = malloc(n * sizeof(FILE *));
     for (int i = 0; i < n; i++)
     {
         char temp[MAX_FILE_SIZE];
@@ -99,7 +99,7 @@ int encrypt_data(char *filenames[], char *output_filename, int n)
     int c;
 
     // Open input files
-    FILE **fp = malloc(n * sizeof(FILE*));
+    FILE **fp = malloc(n * sizeof(FILE *));
     for (int i = 0; i < n; i++)
     {
         fp[i] = fopen(filenames[i], "rb");
@@ -210,7 +210,8 @@ int decrypt_data(char *input_filename)
     int c;
 
     // Open input file
-    FILE *fp = fopen(input_filename, "rb");
+    FILE *fp;
+    fp = fopen(input_filename, "rb");
     if (fp == NULL)
     {
         printf("\nError while opening file %s! Make sure it exists.\n", input_filename);
@@ -237,7 +238,9 @@ int decrypt_data(char *input_filename)
             printf("\nError while opening file %s for writing!\n", v1.file_names[i]);
             exit(1);
         }
+
         int size = v1.files_positions[i];
+
         for (int j = 0; j < size; j++)
         {
             c = fgetc(fp);
@@ -291,7 +294,13 @@ void exec_main(int argc, char *argv[])
                 }
                 else
                 {
-                    files[k] = (char *)malloc(sizeof(char) * strlen(argv[j]) + 1);
+                    files[k] = (char *)malloc(sizeof(char) * (strlen(argv[j]) + 1));
+                    if (files[k] == NULL)
+                    {
+                        printf("Memory allocation error.\n");
+                        exit(1);
+                    }
+                    strcpy(files[k], ""); // Initialize the string as empty
                     strcat(files[k], argv[j]);
                     k++;
                     n++;
@@ -300,20 +309,30 @@ void exec_main(int argc, char *argv[])
         }
         if (strcmp(argv[i], "-o") == 0)
         {
-            output = (char *)malloc(sizeof(char) * strlen(argv[i + 1]) + 1);
+            output = (char *)malloc(sizeof(char) * (strlen(argv[i + 1]) + 1));
+            if (output == NULL)
+            {
+                printf("Memory allocation error.\n");
+                exit(1);
+            }
+            strcpy(output, ""); // Initialize the string as empty
             strcat(output, argv[i + 1]);
         }
         if (strcmp(argv[i], "-d") == 0)
         {
             to_decrypt = 1;
-            decrypt = (char *)malloc(sizeof(char) * strlen(argv[i + 1]) + 1);
-            strcat(decrypt, argv[i + 1]);
+            decrypt = (char *)malloc(sizeof(char) * (strlen(argv[i + 1]) + 1));
+            if (decrypt == NULL)
+            {
+                printf("Memory allocation error.\n");
+                exit(1);
+            }
+            strcpy(decrypt, argv[i + 1]);
         }
     }
     if (to_encrypt)
     {
         encrypt_data(files, output, n);
-        compress_file(output);
     }
     if (to_decrypt)
     {
